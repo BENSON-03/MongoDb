@@ -15,3 +15,33 @@ export async function getProductsById(id) {
   });
   return product;
 }
+export async function updateProduct(
+  id,
+  title,
+  price,
+  quantity,
+  imageUrl,
+  description
+) {
+  let result = await collection.updateOne(
+    {
+      _id: ObjectId.createFromHexString(id),
+    },
+    {
+      $set: {
+        title,
+        price: Number(price),
+        quantity: Number(quantity),
+        imageUrl,
+        description,
+      },
+    }
+  );
+  return result;
+}
+export async function deleteProduct(id) {
+  let result = await collection.deleteOne({
+    _id: ObjectId.createFromHexString(id),
+  });
+  return result;
+}

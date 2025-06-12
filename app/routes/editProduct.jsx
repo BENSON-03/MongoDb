@@ -1,12 +1,27 @@
-import { data, Form, Link, redirect } from "react-router";
+import React from "react";
+import { Form, Link, redirect, useActionData } from "react-router";
+import Button from "../components/Button";
 import Input from "../components/Input";
 import Label from "../components/Label";
-import Button from "../components/Button";
 import FormSpacer from "../components/FormSpacer";
+import ErrorMessage from "../components/ErrorMessage";
+import { updateProduct } from "../models/product";
 import { validationText, validationNumber } from "../.server/validation";
-import { CreateProduct } from "../models/product";
+import { getProductsById } from "../models/product";
 
-export async function action({ request }) {
+export async function loader({ params }) {
+  let id = params.id;
+  console.log({ id });
+
+  //Fetch Product By Id and return it
+  let editProd = await getProductsById(params.id);
+
+  console.log({ editProd });
+  return editProd;
+}
+
+// Action function for form submission
+export async function action({ request, params }) {
   let formData = await request.formData();
   let title = formData.get("title");
   let price = formData.get("price");
@@ -15,41 +30,35 @@ export async function action({ request }) {
   let description = formData.get("description");
   console.log({ title, price, quantity, imageUrl, description });
 
-  //validate the data
-
-  let fieldError = {
+  // Validate the data
+  let fieldErrors = {
     title: validationText(title),
     price: validationNumber(price),
     quantity: validationNumber(quantity),
     imageUrl: validationText(imageUrl),
     description: validationText(description),
   };
-  //return error
-  if (Object.values(fieldError).some(Boolean)) {
-    return data({ fieldError }, { status: 404, statusText: "Bad Request" });
+
+  // Return error if any field is invalid
+  if (Object.values(fieldErrors).some(Boolean)) {
+    return { fieldErrors };
   }
 
-  let productObj = {
-    title,
-    price: Number(price),
-    quantity: Number(quantity),
-    imageUrl,
-    description,
-  };
-  let result = await CreateProduct(productObj);
-  console.log(result);
+  //updateProduct
 
-  let id = result.insertedId.toString();
-
+  let id = params.id;
+  let result = await updateProduct(id, title, price, quantity, imageUrl);
   return redirect(`/product/${id}`);
 }
 
-// ... existing imports ...
+// Main component for editing product
 
-export default function AddProduct({ actionData }) {
+export default function EditProduct({ loaderData }) {
+  const actionData = useActionData();
+
   return (
-    <main className="max-w-xl mx-auto mt-4 md:mt-10 p-4 md:p-8 bg-white rounded-lg shadow-md">
-      <div className="flex justify-between items-center mb-6 mt-10">
+    <main className="max-w-xl mx-auto mt-auto md:mt-10 p-4 md:p-8 bg-white rounded-lg shadow-md">
+      <div className="flex justify-between items-center mb-6">
         <Link
           to="/product"
           className="flex items-center gap-1 bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded shadow transition"
@@ -57,7 +66,7 @@ export default function AddProduct({ actionData }) {
           <span>&larr;</span> Back
         </Link>
         <h1 className="text-xl md:text-2xl font-bold text-red-700">
-          Add New Product
+          Edit Product
         </h1>
       </div>
 
@@ -147,7 +156,7 @@ export default function AddProduct({ actionData }) {
 
         <Button
           className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full shadow-lg transition-transform hover:scale-[1.02]"
-          text="Add Product"
+          text="Edit Product"
         />
       </Form>
     </main>
