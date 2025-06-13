@@ -49,7 +49,7 @@ export async function action({ request }) {
 export default function AddProduct({ actionData }) {
   return (
     <main className="max-w-xl mx-auto mt-4 md:mt-10 p-4 md:p-8 bg-white rounded-lg shadow-md">
-      <div className="flex justify-between items-center mb-6 mt-10">
+      <div className="flex justify-between items-center mb-6">
         <Link
           to="/product"
           className="flex items-center gap-1 bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded shadow transition"
