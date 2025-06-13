@@ -2,7 +2,6 @@ import { data, Form, Link, redirect } from "react-router";
 import Input from "../components/Input";
 import Label from "../components/Label";
 import Button from "../components/Button";
-import FormSpacer from "../components/FormSpacer";
 import { validationText, validationNumber } from "../.server/validation";
 import { CreateProduct } from "../models/product";
 
@@ -63,7 +62,7 @@ export default function AddProduct({ actionData }) {
 
       <Form method="post" className="flex flex-col gap-4 text-black">
         {/* Title Field */}
-        <FormSpacer>
+        <div className="flex flex-col gap-2.5">
           <Label htmlFor="title">Product Title*</Label>
           <Input
             type="text"
@@ -76,10 +75,10 @@ export default function AddProduct({ actionData }) {
           {actionData?.fieldErrors?.title && (
             <ErrorMessage text={actionData.fieldErrors.title} />
           )}
-        </FormSpacer>
+        </div>
 
         {/* Price Field */}
-        <FormSpacer>
+        <div className="flex flex-col gap-2.5">
           <Label htmlFor="price">Price ($)*</Label>
           <Input
             type="number"
@@ -92,10 +91,10 @@ export default function AddProduct({ actionData }) {
           {actionData?.fieldErrors?.price && (
             <ErrorMessage text={actionData.fieldErrors.price} />
           )}
-        </FormSpacer>
+        </div>
 
         {/* Image URL Field */}
-        <FormSpacer>
+        <div className="flex flex-col gap-2.5">
           <Label htmlFor="imageUrl">Image URL*</Label>
           <Input
             type="text"
@@ -108,10 +107,10 @@ export default function AddProduct({ actionData }) {
           {actionData?.fieldErrors?.imageUrl && (
             <ErrorMessage text={actionData.fieldErrors.imageUrl} />
           )}
-        </FormSpacer>
+        </div>
 
         {/* Quantity Field */}
-        <FormSpacer>
+        <div className="flex flex-col gap-2.5">
           <Label htmlFor="quantity">Stock Quantity*</Label>
           <Input
             type="number"
@@ -124,10 +123,10 @@ export default function AddProduct({ actionData }) {
           {actionData?.fieldErrors?.quantity && (
             <ErrorMessage text={actionData.fieldErrors.quantity} />
           )}
-        </FormSpacer>
+        </div>
 
         {/* Description Field */}
-        <FormSpacer>
+        <div className="flex flex-col gap-2.5">
           <Label htmlFor="description">Description*</Label>
           <textarea
             name="description"
@@ -143,7 +142,7 @@ export default function AddProduct({ actionData }) {
           {actionData?.fieldErrors?.description && (
             <ErrorMessage text={actionData.fieldErrors.description} />
           )}
-        </FormSpacer>
+        </div>
 
         <Button
           className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full shadow-lg transition-transform hover:scale-[1.02]"
